@@ -40,16 +40,26 @@ app.get('/meow', function(req, res) {
  	{
  		//if (err) throw err
  		res.writeHead(200, {'content-type':'text/html'});
-		client.lrange('stack',0,-1, function(err,reply) {
+		client.lrange('stack',0,0, function(err,reply) {
 		
  		reply.forEach(function (imagedata) 
  		{
+		//console.log(imagedata);
+		
 		res.write("<h1>\n<img src='data:my_pic.jpg;base64,"+imagedata+"'/>");
- 		});
+		//res.end();
+		});
+		client.ltrim('stack',1,-1);
+	res.end();
 	});
-    	res.end();
+    	
  	}
- });
+ })
+
+app.get('/del',function(req,res) {
+	client.del('stack'); 
+    	res.send("Emptying list...Done");
+})
 
 app.get('/recent', function(req, res) {
 		
@@ -65,7 +75,6 @@ app.get('/set', function(req, res) {
 	})
 
 app.get('/get', function(req, res) {
-	var value;
 	client.get("key",function(err,reply) {
 	res.send(reply);
 	});
