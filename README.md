@@ -69,7 +69,7 @@ load-balance across all the available servers.
 Run on separate terminals:
 
 ```
-node proxy_server.js
-node main.js 3000
+node proxy.js
+node main.js
 ```
 
