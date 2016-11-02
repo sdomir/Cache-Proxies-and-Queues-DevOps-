@@ -21,8 +21,8 @@ app.use(function(req, res, next)
 
 
 app.post('/upload',[ multer({ dest: './uploads/'}), function(req, res){
-    console.log(req.body) // form fields
-    console.log(req.files) // form files
+    //console.log(req.body) // form fields
+    //console.log(req.files) // form files
 
     if( req.files.image )
     {
@@ -48,6 +48,7 @@ app.get('/meow', function(req, res) {
 		//console.log(imagedata);
 		
 		res.write("<h1>\n<img src='data:my_pic.jpg;base64,"+imagedata+"'/>");
+	        console.log(req.headers.host)
 		//res.end();
 		});
 		client.ltrim('stack',1,-1);
@@ -66,6 +67,7 @@ app.get('/recent', function(req, res) {
 		
 	client.lrange('queue',0,4, function(err,reply) {
 	res.send(reply);
+	console.log(req.headers.host)
 	});
         })
 
@@ -73,11 +75,13 @@ app.get('/set', function(req, res) {
 	client.set("key", "this message will self-destruct in 10 seconds");
 	client.expire("key",10);
 	res.send("Key set...10 seconds countdown begins");
+	console.log(req.headers.host)
 	})
 
 app.get('/get', function(req, res) {
 	client.get("key",function(err,reply) {
 	res.send(reply);
+	console.log(req.headers.host)
 	});
 	
 	})
@@ -90,6 +94,7 @@ app.get('/get', function(req, res) {
 
 app.get('/', function(req, res) {
   res.send('hello world')
+  console.log(req.headers.host)
 })
 
 //spawn a new server
@@ -138,26 +143,7 @@ var server = app.listen(3000, function () {
    var host = server.address().address
    var port = server.address().port
    var url = "http://"+host+":"+port	
-   //client.lpush('servers',url)
+   client.lpush('servers',url)
  console.log('Example app listening at http://%s:%s', host, port)
  })
-//Proxy
 
-    var options = {};
-    var proxy   = httpProxy.createProxyServer(options);
-
-    var ser  = http.createServer(function(req, res)
-    {
-      client.rpoplpush('servers','servers', function(err,reply) {
-	console.log('Request handled by:'+reply)	
-      proxy.web( req, res, {target: reply } );
-      //res.send("Request routed to: "+reply);
-	});
-    });
-    ser.listen(8091);
-
-
-
-
-
-//infrastructure.setup();
