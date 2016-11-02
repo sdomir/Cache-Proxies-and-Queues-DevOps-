@@ -2,6 +2,9 @@
 Cache, Proxies, Queues
 =========================
 
+### Screencast
+
+
 ### Setup
 
 * Clone this repo, run `npm install`.
@@ -27,34 +30,33 @@ Express uses the concept of routes to use pattern matching against requests and 
 
 ### Redis
 
-You will be using [redis](http://redis.io/) to build some simple infrastructure components, using the [node-redis client](https://github.com/mranney/node_redis).
+We will be using [redis](http://redis.io/) to build some simple infrastructure components, using the [node-redis client](https://github.com/mranney/node_redis).
 
 	var redis = require('redis')
 	var client = redis.createClient(6379, '127.0.0.1', {})
 
-In general, you can run all the redis commands in the following manner: client.CMD(args). For example:
+In general, all the redis commands can be run in the following manner: client.CMD(args). For example:
 
 	client.set("key", "value");
 	client.get("key", function(err,value){ console.log(value)});
 
 ### TASK 1: An expiring cache
 
-We are creating two routes, `/get` and `/set`.
+Created two routes, `/get` and `/set`.
 
-When `/set` is visited, we are setting a new key, with the value:
+When `/set` is visited, a new key is set to the value:
 > "this message will self-destruct in 10 seconds".
 
 This key will self destruct in 10 seconds.
-When `/get` is visited, we are fetching that key, and send value back to the client. 
+When `/get` is visited, the value of the key is sent back to the client. 
 
 ### TASK 2: Recent visited sites
 
-We are create a new route, `/recent`, which will display 5 most recently visited sites.
-
+This creates a new route, `/recent`, which will display 5 most recently visited sites.
 
 ### TASK 3: Cat picture uploads: queue
 
-We are implementing two routes, `/upload`, and `/meow` for uploading and displaying the pictures respectively.
+Implemented two routes, `/upload`, and `/meow` for uploading and displaying the pictures respectively.
 
 ### TASK 4: Spawning/destroying servers
 
